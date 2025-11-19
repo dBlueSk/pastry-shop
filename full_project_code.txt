@@ -1,0 +1,392 @@
+--- PASTRY SHOP PROJECT EXPORT ---
+---------------------------------
+FILE: next.config.mjs
+---------------------------------
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export', // <--- REQUIRED for GitHub Pages
+  
+  // IMPORTANT: This must match your repository name 'pastry-shop'
+  basePath: '/pastry-shop', 
+  
+  images: {
+    unoptimized: true, // <--- REQUIRED for static export
+  },
+  
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};
+
+export default nextConfig;
+
+
+---------------------------------
+FILE: package.json
+---------------------------------
+{
+  "name": "pastry-shop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+    
+  },
+  "dependencies": {
+    "next": "16.0.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.3",
+    "tailwindcss": "^4"
+  }
+}
+
+
+
+---------------------------------
+FILE: ./app/layout.js
+---------------------------------
+import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+export const metadata = {
+  title: "La Patisserie | Artisan Bakery",
+  description: "Handcrafted pastries and breads baked fresh daily.",
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className="scroll-smooth">
+      <body className="bg-stone-50 text-stone-800 antialiased">
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
+
+
+---------------------------------
+FILE: ./app/page.js
+---------------------------------
+import Image from "next/image";
+import { products } from "./data/pastries";
+import ProductCard from "@/components/ProductCard";
+
+export default function Home() {
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-[90vh] flex items-center justify-center">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=1920&q=80"
+            alt="Baker kneading dough"
+            fill
+            className="object-cover brightness-[0.4]"
+            priority
+          />
+        </div>
+        <div className="relative z-10 text-center text-white px-4">
+          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 animate-fade-in">
+            Artisan Baking <br /> <span className="text-amber-400">With Love</span>
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 font-light max-w-2xl mx-auto">
+            Freshly baked breads and delicate pastries made from scratch every morning.
+          </p>
+          <a href="#menu" className="bg-amber-500 text-stone-900 px-8 py-3 rounded-full font-bold hover:bg-amber-400 transition transform hover:scale-105">
+            View Our Menu
+          </a>
+        </div>
+      </section>
+
+      {/* Menu Section */}
+      <section id="menu" className="py-20 px-4 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-serif font-bold text-stone-900 mb-4">Our Selection</h2>
+          <p className="text-stone-600 max-w-xl mx-auto">
+            Explore our range of handcrafted pastries. We use only high-quality butter, organic flour, and seasonal fruits.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="bg-stone-100 py-20">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+          <div className="md:w-1/2 relative h-96 w-full rounded-lg overflow-hidden shadow-xl">
+             <Image
+              src="https://images.unsplash.com/photo-1556910103-1c02745a30bf?auto=format&fit=crop&w=800&q=80"
+              alt="Chefs working"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="md:w-1/2">
+            <h2 className="text-4xl font-serif font-bold text-stone-900 mb-6">The Art of Pastry</h2>
+            <p className="text-stone-700 text-lg mb-4 leading-relaxed">
+              Founded in 2023, La Patisserie started with a simple mission: to bring the authentic taste of French baking to your neighborhood. 
+            </p>
+            <p className="text-stone-700 text-lg leading-relaxed">
+              Our chefs wake up before dawn to ensure every croissant is flaky, every tart is crisp, and every loaf is warm when you walk through our doors.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+
+---------------------------------
+FILE: ./app/data/pastries.js
+---------------------------------
+// app/data/pastries.js
+export const products = [
+  {
+    id: 1,
+    name: "Classic Croissant",
+    description: "Buttery, flaky, and golden brown. The perfect morning treat.",
+    price: "$3.50",
+    image: "https://images.unsplash.com/photo-1555507036-ab1f40388085?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 2,
+    name: "Pain au Chocolat",
+    description: "Rolled dough with a rich dark chocolate center.",
+    price: "$4.00",
+    image: "https://images.unsplash.com/photo-1626263381364-454c98654942?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 3,
+    name: "Berry Tart",
+    description: "Fresh seasonal berries on a vanilla custard base.",
+    price: "$5.50",
+    image: "https://images.unsplash.com/photo-1519340333755-56e9c1d04579?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 4,
+    name: "Macarons (Box of 6)",
+    description: "Assorted flavors including Pistachio, Raspberry, and Salted Caramel.",
+    price: "$12.00",
+    image: "https://images.unsplash.com/photo-1569864358642-9d1684040f43?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 5,
+    name: "Sourdough Loaf",
+    description: "Fermented for 48 hours for that perfect crust and tang.",
+    price: "$7.00",
+    image: "https://images.unsplash.com/photo-1585476263060-b7d6d7a35d1c?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 6,
+    name: "Cinnamon Roll",
+    description: "Topped with cream cheese frosting and caramelized sugar.",
+    price: "$4.50",
+    image: "https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=800&q=80",
+  },
+];
+
+
+---------------------------------
+FILE: ./app/globals.css
+---------------------------------
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+---------------------------------
+FILE: ./components/ProductCard.js
+---------------------------------
+import Image from 'next/image';
+
+export default function ProductCard({ product }) {
+  return (
+    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <div className="relative h-64 w-full">
+        <Image 
+          src={product.image} 
+          alt={product.name}
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="p-6">
+        <div className="flex justify-between items-baseline mb-2">
+          <h3 className="text-xl font-serif font-bold text-stone-800">{product.name}</h3>
+          <span className="text-amber-700 font-bold">{product.price}</span>
+        </div>
+        <p className="text-stone-600 text-sm">{product.description}</p>
+        <button className="mt-4 w-full bg-stone-900 text-white py-2 rounded hover:bg-amber-700 transition-colors">
+          Order Now
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+---------------------------------
+FILE: ./components/Navbar.js
+---------------------------------
+import Link from 'next/link';
+
+export default function Navbar() {
+  return (
+    <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-sm border-b border-stone-200">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          <div className="flex-shrink-0 flex items-center">
+            <Link href="/" className="text-2xl font-serif text-amber-800 font-bold">
+              La Patisserie
+            </Link>
+          </div>
+          <div className="hidden sm:flex space-x-8">
+            <Link href="/" className="text-stone-600 hover:text-amber-700 px-3 py-2 font-medium transition">Home</Link>
+            <Link href="#menu" className="text-stone-600 hover:text-amber-700 px-3 py-2 font-medium transition">Menu</Link>
+            <Link href="#about" className="text-stone-600 hover:text-amber-700 px-3 py-2 font-medium transition">About</Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+
+---------------------------------
+FILE: ./components/Footer.js
+---------------------------------
+export default function Footer() {
+  return (
+    <footer className="bg-stone-900 text-stone-300 py-12">
+      <div className="max-w-6xl mx-auto px-4 text-center">
+        <h2 className="text-2xl font-serif text-amber-500 mb-4">La Patisserie</h2>
+        <p className="mb-4">Baking the world a better place, one crumb at a time.</p>
+        <p className="text-sm text-stone-500">© {new Date().getFullYear()} Pastry Shop. Built with Next.js</p>
+      </div>
+    </footer>
+  );
+}
+
+
+---------------------------------
+FILE: ./.github/workflows/deploy.yml
+---------------------------------
+name: Deploy Next.js site to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            echo "runner=yarn" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ -f "${{ github.workspace }}/package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "command=ci" >> $GITHUB_OUTPUT
+            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "Unable to determine package manager"
+            exit 1
+          fi
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        with:
+          static_site_generator: next
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+      - name: Install dependencies
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Build with Next.js
+        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+
