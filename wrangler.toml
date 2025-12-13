@@ -1,0 +1,5 @@
+name = "pastry-shop"
+compatibility_date = "2025-12-13"
+
+[site]
+bucket = "./out"
